@@ -1,0 +1,47 @@
+extends ./layout.jade
+
+block link
+    link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+   
+    
+    
+    
+    
+block content
+    div(class="container")
+        div(class="panel panel-primary")
+            div(class="panel-heading")
+                h3(class="panel-title") Lista de Habilidades
+            div(class="panel-body")
+                div(class="container")
+                    div(class="row")
+                        div(class="col-lg-6")
+                            div(class="input-group")
+                                span(class="input-group-addon glyphicon glyphicon-briefcase" id="basic-addon1")
+                                input(type="text" class="form-control" ng-model="skills.habilidad" placeholder="Habilidad" aria-describedby="basic-addon1")
+                            br
+                            div(class="input-group")
+                                label(class="control-label") Nivel:
+                                    select(class="form-control" ng-model="skills.grado")
+                                        option Junior
+                                        option Senior
+                                        option Master
+                            br 
+                            button(class="btn btn-primary" type="submit" ng-click="addSkill()") Agregar
+                        div(class="col-lg-4")
+                            table(class="table")
+                                thead
+                                    tr
+                                        th Habilidad
+                                        th Nivel
+                                tbody
+                                    tr(ng-repeat="habilidad in habilidades track by $index")
+                                        td {{habilidad.habilidad}}
+                                        td {{habilidad.grado}}
+                            
+                            button(class="btn btn-success btn-lg" type="submit" ng-click="saveSkills()") Guardar Habilidades
+                            a(href="/profile")
+                                button(class="btn btn-default btn-lg" type="button") Regresar
+                                
+    script.
+        document.getElementById("newproject").style.visibility = "hidden";

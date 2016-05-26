@@ -1,0 +1,39 @@
+extends ./layout.jade
+
+block link
+    link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+   
+    
+block title
+  title Agregar Developers 
+    
+    
+block content
+  div(class="container")
+    div(class="widget-header") 
+      i(class="icon-plus-sign")
+      h3 Agregar Developers
+    div(class="widget widget-table action-table")
+      div(class="widget-header") 
+        i(class="icon-th-list")
+        h3 Lista de candidatos
+      div(class="widget-content")
+        table(class="table table-striped table-bordered")
+          thead
+            tr
+              th Nombre completo 
+              th Habilidades
+              th(class="td-actions") Agregar
+          each user in users
+            tbody
+              tr
+                td #{user.nombreCompleto}
+                td
+                  each habilidad in user.habilidades
+                    span(class="label label-info") #{habilidad.habilidad} #{habilidad.grado}
+                td(class="td-actions")
+                  form(action="/agregarDesarrolador/#{user._id}/#{idProy}", method="POST")
+                    input(type="submit" class="btn btn-primary" value="agregar" name="agregarDes")
+
+  script.
+    document.getElementById("newproject").style.visibility = "hidden";

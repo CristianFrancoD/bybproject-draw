@@ -1,0 +1,50 @@
+div(class="row")
+  div(class="span12")
+    div(class="widget widget-nopad")
+      div(class="widget-header")
+        i(class="icon-list-alt")
+        h3 Tarjetas de proyectos
+      div(class="widget-content")
+        div(class="widget big-stats-container" style="padding: 15px;")
+          div(class="card-container" style="width: 320px;")
+            div(class="card")
+              div(class="front")
+                div(class="cover")
+                  img(src="../images/rotating_card_thumb3.png")
+                div(class="user")
+                  img(class="img-circle" src="../images/rotating_card_profile.png")
+                div(class="content")
+                  div(class="main")
+                    h3(class="name") Inna Corman
+                    p(class="profession") Product Manager
+                    p(class="text-center") I'm the new Sinatra, and since I made it here I can make it anywhere, yeah, they love me everywhere
+                  div(class="footer")
+                    button(class="btn btn-simple" onclick="rotateCard(this)")
+                      i(class="fa fa-mail-forward") Manual Rotation
+              div(class="back")
+                div(class="header")
+                  h5(class="motto") To be or not to be, this is my awesome motto!
+                div(class="content")
+                  div(class="main")
+                    h4(class="text-center") Job Description
+                    p(class="text-center") Web design, Adobe Photoshop, HTML5, CSS3, Corel and many others...
+                    div(class="stats-container")
+                      div(class="stats")
+                        h4 235
+                        p Followers
+                      div(class="stats")
+                        h4 114
+                        p Following
+                      div(class="stats")
+                        h4 35
+                        p Projects
+                div(class="footer")
+                  button(class="btn btn-simple" rel="tooltip" title="Flip Card" onclick="rotateCard(this)")
+                    i(class="fa fa-reply") Back
+                  div(class="social-links text-center")
+                    a(href="http://creative-tim.com" class="facebook")
+                      i(class="fa fa-facebook fa-fw")
+                    a(href="http://creative-tim.com" class="google")
+                      i(class="fa fa-google-plus fa-fw")
+                    a(href="http://creative-tim.com" class="twitter")
+                      i(class="fa fa-twitter fa-fw")

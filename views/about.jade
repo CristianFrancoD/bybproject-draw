@@ -1,0 +1,51 @@
+doctype html
+html(lang="es")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    meta(name="apple-mobile-web-app-capable" content="yes")
+
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css")
+  
+    link(rel="stylesheet" href="/styles/full.css")
+  
+    script(src="https://code.jquery.com/jquery-2.2.1.min.js" integrity="sha256-gvQgAFzTH6trSrAWoH1iPo9Xc96QxSZ3feW6kem+O00=" crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous")
+
+    title B&B Projects
+  
+  body
+    div(class="modal fade" tabindex="-1" role="dialog" id="aboutModal")
+      div(class="modal-dialog modal-md")
+        div(class="modal-content")
+          div(class="modal-header")
+            button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+              span(aria-hidden='true') &times;
+            h2(class="modal-title") Acerca de...
+
+          div(class="modal-body")
+            form(class="form-horizontal")
+              h1 B&B Projects
+              h2 Desarrollo Rápido de Aplicaciones Web
+              h3 Titular: Ing. Luis Antonio Rámirez Martínez
+              h4 Alumnos:
+              ul
+                li Carlos
+                li Cristian
+                li Héctor
+                li José
+          
+          div(class="modal-footer")
+            button(type="button" class="btn btn-primary" data-dismiss="modal" onclick="location.href='/';") Aceptar
+    
+    script.
+      $(window).load(function() {
+        $('#aboutModal').modal('show');
+      });
+  
+      $(document).ready(function() {
+        $('#aboutModal').on('hidden.bs.modal', function (e) {
+          window.location.href="/";
+        });
+      });

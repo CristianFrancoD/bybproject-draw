@@ -1,0 +1,85 @@
+extends ../layout.jade
+
+block meta
+block link
+block title
+block navbar-header
+block subnavbar-header
+
+block content
+    div(class="main")
+      div(class="main-inner")
+        div(class="container")
+          div(class="row")
+            div(class="span12")
+              div(class="widget widget-nopad")
+                div(class="widget-header")
+                  i(class="icon-list-alt")
+                  h3 Tarjetas de proyectos
+                div(class="widget-content")
+                  each proyect in proyecto
+                    div(class="span5")
+                      div(class="widget big-stats-container"  style="padding: 15px;")
+                        ul(class="messages_layout")
+                          li(class="from_user left")
+                            a(href="#" class="avatar")
+                              img(src="../images/message_avatar1.png")
+                            div(class="message_wrap")
+                              span(class="from_user left")
+                              div(class="info")
+                                h3 Scrum master: #{proyect.proyectManager.nombreCompleto}
+                              div(class="text")
+                                h4 Nombre del proyecto: #{proyect.nombreProyecto}
+                              div(style="padding-top: 10px;")
+                                if proyect.estadoProyecto
+                                  h4 Estado del proyecto: cerrado
+                                else
+                                  h4 Estado del proyecto: abierto
+                                h5 Fecha de solicitud: #{proyect.fechaSolicitud}
+                                h5 Fecha de inicio: #{proyect.fechaArranque}
+                                h5 Descripción del proyecto: #{proyect.descripcion}
+                                if proyect.equipoInvolucdrado.length != 0
+                                  p Equipo de Desarrollo:
+                                  each desarrollador in proyect.equipoInvolucdrado
+                                    p #{desarrollador.nombreCompleto}
+                                else
+                                  p No tienes agregado a nadie en tu equipo de desarrollo
+                                if proyect.productOwner
+                                  p Product Owner: #{proyect.productOwner.nombreCompleto}
+                                else
+                                  p Aun no tienes a tu Product Owner
+                                if usuarioActual == proyect.proyectManager._id
+                                  div
+                                   if proyect.estadoProyecto  
+                                    form(method="post" action="/delProject/#{proyect._id}")
+                                      input(type="submit" class="btn btn-danger" value="Eliminar proyecto" name="delDP")
+                                    form(method="get" action="/backlog/#{proyect._id}")
+                                      input(ng-click="getUserHistory('#{proyect._id}')" type="submit" class="btn btn-danger"  value="Ir al backlog")
+                                   else 
+                                    form(method="post" action="/addpo/#{proyect._id}")
+                                      input(type="submit" class="btn btn-primary" value="Asignar Project Owner" name="addPO")
+                                    form(method="post" action="/adddev/#{proyect._id}")
+                                      input(type="submit" class="btn btn-success" value="Asignar Developers" name="addDev")
+                                    form(method="post" action="/delProject/#{proyect._id}")
+                                      input(type="submit" class="btn btn-danger" value="Eliminar proyecto" name="delDP")
+                                    form(method="get" action="/backlog/#{proyect._id}")
+                                      input(ng-click="getUserHistory('#{proyect._id}')" type="submit" class="btn btn-danger"  value="Ir al backlog")
+                                    form(method="post" action="/cerrarProyecto/#{proyect._id}")
+                                      input( type="submit" class="btn btn-danger"  value="Cerrar proyecto")  
+                                else
+                                  div
+                                    form(method="get" action="/backlog/#{proyect._id}")
+                                      input( ng-click="getUserHistory('#{proyect._id}')" type="submit" class="btn btn-danger"  value="Ir al backlog")
+
+    div(id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+      div.modal-header
+        button(type="button" class="close" data-dismiss="modal" aria-hidden="true") ×
+        h3(id="myModalLabel">Thank you for visiting EGrappler.com)
+      div.modal-body
+        p One fine body…
+      div.modal-footer
+        button(class="btn" data-dismiss="modal" aria-hidden="true") Cerrar
+        button(class="btn btn-primary") Aceptar
+    br
+block footer
+block script

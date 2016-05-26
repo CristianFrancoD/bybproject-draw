@@ -1,0 +1,105 @@
+doctype html
+html(ng-app="bybApp")
+  head
+    meta(charset="utf-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+    meta(name="apple-mobile-web-app-capable" content="yes")
+
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css")
+    
+    link(rel="stylesheet" href="/styles/switchery/switchery.min.css")
+    link(rel="stylesheet" href="/styles/social/bootstrap-social.css")
+    link(rel="stylesheet" href="/styles/full.css")
+    
+    script(src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous")
+    script(src="/js/angular/angular.min.js")
+    script(src="/js/bybProyect.js")
+    
+    script(src="/js/switchery/switchery.min.js")
+
+    title B&B Projects
+    
+  body()
+    div(class="modal fade" tabindex="-1" role="dialog" id="loginModal")
+      div(class="modal-dialog modal-md")
+        div(class="modal-content")
+          div(class="modal-header")
+            button(type="button" class="close" data-dismiss="modal" aria-label="Cerrar")
+              span(aria-hidden='true') &times;
+            h2(class="modal-title") SGPS 
+            h4(class="modal-title") Sistema para la Gestión de Proyectos de Software
+
+          div(class="modal-body")
+            div(class="row")
+              div(class="col-md-6")
+                form(class="form-horizontal" action="sessions" method="POST")
+                  h3 Iniciar sesión
+              
+                  div(class="form-group")
+                    div(class="col-md-12")
+                      div(class="input-group")
+                        span(class="input-group-addon")
+                          i(class="glyphicon glyphicon-envelope")
+                        input(type="email" class="form-control" ng-model="user.email" name="email" id="email" placeholder="Correo electrónico")
+
+                  div(class="form-group")
+                    div(class="col-md-12")
+                      div(class="input-group")
+                        span(class="input-group-addon")
+                          i(class="glyphicon glyphicon-lock")
+                        input(type="password" class="form-control" ng-model="user.contra" name="contra" id="contrasena" placeholder="Contraseña")
+
+                  div(class="form-group")
+                    div(class="col-md-12")
+                      input(type="checkbox" class="js-switch")
+                      label(style="padding-left: 10px;") Recordar mis datos
+                  div
+                  input(type="submit" value="Aceptar" class="btn btn-primary btn-block")
+                 
+                
+              div(class="col-md-6")
+                h3 También puedes
+                
+                div(style="padding-bottom: 10px;")
+                  div(class="row")
+                    div(class="col-md-12")
+                      a(class="btn btn-block btn-social btn-facebook" href='auth/facebook')
+                        span(class="fa fa-facebook")
+                        | Iniciar sesión con Facebook
+                
+                div(style="padding-bottom: 10px;")  
+                  div(class="row")
+                    div(class="col-md-12")
+                      a(class="btn btn-block btn-social btn-twitter" href='auth/twitter')
+                        span(class="fa fa-twitter")
+                        | Iniciar sesión con Twitter
+                        
+                div(class="row")
+                  div(class="col-md-12")
+                    a(class="btn btn-block btn-social btn-google" href='auth/google')
+                      span(class="fa fa-google")
+                      | Iniciar sesión con Google
+                      
+          div(class="modal-footer")
+            | ¿No puedes iniciar sesión?. Tal vez 
+            a(href="#") olvidaste tú contraseña
+            |.
+  
+    script.
+      $(window).load(function() {
+        $('#loginModal').modal('show');
+      });
+      
+      $(document).ready(function() {
+
+        // Aplicar estílo a los Checkboxes.
+        var checkBox = document.querySelector('.js-switch');
+        var init = new Switchery(checkBox, {size: 'small'});
+
+        $('#loginModal').on('hidden.bs.modal', function (e) {
+          window.location.href="/";
+        });
+      });

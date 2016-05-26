@@ -1,0 +1,415 @@
+extends ./layout.jade
+
+block meta
+block link
+block title
+block navbar-header
+block subnavbar-header
+
+block content
+  if cierreProyecto
+    div(class="main")
+      div(class="main-inner")
+        div(class="container")
+          div(class="row")
+            div(class="span12")
+              div(class="widget widget-nopad")
+                div(class="widget-header")
+                  i(class="icon-list-alt")
+                  h3 Registro de backlog
+                div(class="widget-content")
+                  div(style="padding: 15px;")
+                    form(ng-submit="saveUserHistory('#{idProy}')")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.narrativa" name="narrativa" id="narrativa" placeholder="Narrativa" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.como" name="como" id="como" placeholder="Como" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.detalmanera" name="detalmanera" id="detalmanera" placeholder="De tal manera" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.quiero" name="quiero" id="quiero" placeholder="Quiero" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.creadorTarjeta" name="creadorTarjeta" id="creadorTarjeta" placeholder="Creador tarjeta" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.prioridad" name="prioridad" id="prioridad" placeholder="Prioridad" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.tamanio" name="tamanio" id="tamanio" placeholder="Tamaño" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.criteriosAceptacion" name="criteriosAceptacion" id="criteriosAceptacion" placeholder="Criterios de Aceptacion" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.dado" name="dado" id="dado" placeholder="Dado" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.cuando" name="cuando" id="cuando" placeholder="Cuando" disabled="disabled")
+                      div(class="form-group")
+                        input(type="text" class="form-control span4" ng-model="userHistory.entonces" name="entonces" id="entonces" placeholder="Entonces" disabled="disabled")      
+                      div
+                        input(type="submit" value="Aceptar" class="btn btn-info" disabled="disabled")
+                      div(class="alert" style="margin-top: 10px;" ng-show="historias.length==0")
+                        button(type="button" class="close" data-dismiss="alert") ×
+                        | No hay historias de usuario
+                      div(class="widget widget-table action-table" style="margin-top: 10px;")
+                        div(class="widget-header")
+                          i(class="icon-th-list")
+                          h3 Historias de usuario
+  
+                        div(class="widget-content" style="padding: 20px;")
+                          div(class="flip-container" ntouchstart="this.classList.toggle('hover');" ng-repeat="item in historias" ng-if="!item.estado")
+                            a(href="#editarHistoria" role="button" class="btn" data-toggle="modal" ng-click="showEditbacklog($index)" disabled="disabled")
+                              i(class="btn-icon-only icon-edit")      
+                            a( role="button" class="btn" ng-click="historyToSprint(item)" disabled="disabled")
+                              i(class="btn-icon-only icon-ok-sign")
+                            div(class="flipper")
+                              div(class="front")
+                                ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                  li(sytle="list-style:none; margin: 1em; float: left;")
+                                    h2 {{item.narrativa}}
+                                    p Como: {{item.como}}
+                                    p De tal manera: {{item.detalmanera}}
+                                    p Quiero: {{item.quiero}}
+                                    p Creador {{item.creadorTarjeta}}
+                                    p Prioridad {{item.prioridad}}
+                                    p Tamaño {{item.tamanio}}
+                              div(class="back")
+                                ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                  li(sytle="list-style:none; margin: 1em; float: left;")
+                                    h2 Critérios de aceptación 
+                                    p {{item.criteriosAceptacion}}
+                                    p Dado: {{item.dado}}
+                                    p Cuando: {{item.cuando}}
+                                    p Entonces: {{item.entonces}}
+  
+                      div(class="widget widget-table action-table" style="margin-top: 10px;")
+                        div(class="widget-header")
+                          i(class="icon-th-list")
+                          h3 Release Backlog
+                        div(class="widget-content" style="padding: 20px;")
+                          div(class="widget widget-table action-table" style="margin-top: 10px;" ng-repeat="item in releaseBacklog[0].sprints")
+                            div(class="widget-header")
+                              i(class="icon-th-list")
+                              h3 Sprint {{item.idSprint}} Tamaño: {{item.tamanioSprint}}
+                              if hayProductOwner
+                                button(type="button" class="btn btn-success" ng-click="checkSprint(item._id)" ng-if="!item.aprobado") Aprobar Sprint
+                            div(class="alert alert-success" role="alert" ng-if="item.aprobado") El Sprint fue aprobado
+                            div(class="alert alert-info" role="alert" ng-if="!item.aprobado") Sprint pendiente de validacion
+                            div(class="widget-content" style="padding: 20px;")
+                              div(class="flip-container" ntouchstart="this.classList.toggle('hover');" ng-repeat="backlog in item.backlog")
+                                if hayProductOwner
+                                  div(ng-if="!item.aprobado")  
+                                    a(role="button" class="btn" ng-click="backlogAccepted('aceptada',backlog._id,item._id)" disabled="disabled")
+                                      i(class="btn-icon-only icon-ok-sign")
+                                    a(role="button" class="btn" ng-click="backlogRejected('rechazada',backlog,item._id)" disabled="disabled")
+                                      i(class="btn-icon-only icon-remove")
+                                input(role="button" class="btn btn-info" value="{{backlog.estadoAprobadaRechazada}}" disabled="disabled") 
+                                div(class="flipper")
+                                  div(class="front")
+                                    ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                      li(sytle="list-style:none; margin: 1em; float: left;")
+                                        h2 {{backlog.narrativa}}
+                                        p Como: {{backlog.como}}
+                                        p De tal manera: {{backlog.detalmanera}}
+                                        p Quiero: {{backlog.quiero}}
+                                        p Creador {{backlog.creadorTarjeta}}
+                                        p Prioridad {{backlog.prioridad}}
+                                        p Tamaño {{backlog.tamanio}}
+                                  div(class="back")
+                                    ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                      li(sytle="list-style:none; margin: 1em; float: left;")
+                                        h2 Critérios de aceptación 
+                                        p {{backlog.criteriosAceptacion}}
+                                        p Dado: {{backlog.dado}}
+                                        p Cuando: {{backlog.cuando}}
+                                        p Entonces: {{backlog.entonces}}
+                                    
+                      div(class="widget widget-table action-table" style="margin-top: 10px;")
+                        div(class="widget-header")
+                          i(class="icon-th-list")
+                          h3 Sprints 
+                        div(class="widget-content" style="padding: 20px;")
+                          div(class="form-group" ng-show="haySprint")
+                            form()
+                              label Tamaño
+                              input(type="text" placeholder="Tamaño" ng-model="datosSprint.tamanioSprint" disabled="disabled")
+                              label ID
+                              input(type="text" placeholder="ID" ng-model="datosSprint.idSprint" disabled="disabled")
+                              input(type="button" value="Crear Sprint" ng-click="crearSprint('#{idProy}')" disabled="disabled")
+                          h3 ID Sprint {{sprint.idSprint}}
+                          h3 Tamaño {{sprint.tamanioSprint}}
+                          button(type="button" class="btn btn-primary" ng-click="sprintToRelease()" disabled="disabled") Enviar al Release
+                          div(class="flip-container" ntouchstart="this.classList.toggle('hover');" ng-repeat="backlog in sprint.backlog" ng-if="!sprint.mandadaAlRelease")
+                            div(class="flipper")
+                              div(class="front")
+                                ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                  li(sytle="list-style:none; margin: 1em; float: left;")
+                                    h2 {{backlog.narrativa}}
+                                    p Como: {{backlog.como}}
+                                    p De tal manera: {{backlog.detalmanera}}
+                                    p Quiero: {{backlog.quiero}}
+                                    p Creador {{backlog.creadorTarjeta}}
+                                    p Prioridad {{backlog.prioridad}}
+                                    p Tamaño {{backlog.tamanio}}
+                              div(class="back")
+                                ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                  li(sytle="list-style:none; margin: 1em; float: left;")
+                                    h2 Critérios de aceptación 
+                                    p {{backlog.criteriosAceptacion}}
+                                    p Dado: {{backlog.dado}}
+                                    p Cuando: {{backlog.cuando}}
+                                    p Entonces: {{backlog.entonces}}
+                            
+  
+                                
+    div(id="editarHistoria" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+      div(class="modal-header")
+        button(type="button" class="close" data-dismiss="modal" aria-hidden="true") ×
+        h3 Editar historia de usuario
+      div(class="modal-body")
+        form()
+          div(class="form-group")
+            label Narrativa:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.narrativa" name="narrativa" id="narrativa" placeholder="Narrativa")
+          div(class="form-group")
+            label Como:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.como" name="como" id="como" placeholder="Como")
+          div(class="form-group")
+            label De tal manera:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.detalmanera" name="detalmanera" id="detalmanera" placeholder="De tal manera")
+          div(class="form-group")
+            label Quiero:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.quiero" name="quiero" id="quiero" placeholder="Quiero")
+          div(class="form-group")
+            label Creador de tarjeta:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.creadorTarjeta" name="creador" id="creador" placeholder="Creador tarjeta")
+          div(class="form-group")
+            label Prioridad:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.prioridad" name="prioridad" id="prioridad" placeholder="Prioridad")
+          div(class="form-group")
+            label Tamaño:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.tamanio" name="tamanio" id="tamanio" placeholder="Tamaño")
+          div(class="form-group")
+            label Criterios de aceptacion:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.criteriosAceptacion" name="criteriosAceptacion" id="criteriosAceptacion" placeholder="Criterios de aceptacion")
+          div(class="form-group")
+            label Dado:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.dado" name="dado" id="dado" placeholder="Dado")
+          div(class="form-group")
+            label Cuando:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.cuando" name="cuando" id="cuando" placeholder="Cuando")
+          div(class="form-group")
+            label Entonces:
+            input(type="text" class="form-control span4" ng-model="historyToEdit.entonces" name="entonces" id="entonces" placeholder="Entonces")
+                                                
+          div(class="modal-footer")
+            button(class="btn" data-dismiss="modal" aria-hidden="true") Cerrar
+            button(class="btn btn-primary" ng-click="editbacklog()" data-dismiss="modal" aria-hidden="true") Guardar
+  else
+    div(class="main")
+    div(class="main-inner")
+      div(class="container")
+        div(class="row")
+          div(class="span12")
+            div(class="widget widget-nopad")
+              div(class="widget-header")
+                i(class="icon-list-alt")
+                h3 Registro de backlog
+              div(class="widget-content")
+                div(style="padding: 15px;")
+                  form(ng-submit="saveUserHistory('#{idProy}')")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.narrativa" name="narrativa" id="narrativa" placeholder="Narrativa")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.como" name="como" id="como" placeholder="Como")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.detalmanera" name="detalmanera" id="detalmanera" placeholder="De tal manera")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.quiero" name="quiero" id="quiero" placeholder="Quiero")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.creadorTarjeta" name="creadorTarjeta" id="creadorTarjeta" placeholder="Creador tarjeta")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.prioridad" name="prioridad" id="prioridad" placeholder="Prioridad")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.tamanio" name="tamanio" id="tamanio" placeholder="Tamaño")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.criteriosAceptacion" name="criteriosAceptacion" id="criteriosAceptacion" placeholder="Criterios de Aceptacion")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.dado" name="dado" id="dado" placeholder="Dado")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.cuando" name="cuando" id="cuando" placeholder="Cuando")
+                    div(class="form-group")
+                      input(type="text" class="form-control span4" ng-model="userHistory.entonces" name="entonces" id="entonces" placeholder="Entonces")      
+                    div
+                      input(type="submit" value="Aceptar" class="btn btn-info")
+                    div(class="alert" style="margin-top: 10px;" ng-show="historias.length==0")
+                      button(type="button" class="close" data-dismiss="alert") ×
+                      | No hay historias de usuario
+                    // Post-it's de proyectos.
+                    style.
+                      .ul-li-a {
+                        border: 1px solid #BDBDBD;
+                        text-decoration:none;
+                        color: #000;
+                        background: #ffc;
+                        display: block;
+                        width: 28%;
+                        padding: 1em;
+                        box-shadow: 10px 10px 5px #a4a4a4;
+                       }
+                    div(class="widget widget-table action-table" style="margin-top: 10px;")
+                      div(class="widget-header")
+                        i(class="icon-th-list")
+                        h3 Historias de usuario
+
+                      div(class="widget-content" style="padding: 20px;")
+                        div(class="flip-container" ntouchstart="this.classList.toggle('hover');" ng-repeat="item in historias" ng-if="!item.estado")
+                          a(href="#editarHistoria" role="button" class="btn" data-toggle="modal" ng-click="showEditbacklog($index)")
+                            i(class="btn-icon-only icon-edit")      
+                          a( role="button" class="btn" ng-click="historyToSprint(item)")
+                            i(class="btn-icon-only icon-ok-sign")
+                          div(class="flipper")
+                            div(class="front")
+                              ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                li(sytle="list-style:none; margin: 1em; float: left;")
+                                  h2 {{item.narrativa}}
+                                  p Como: {{item.como}}
+                                  p De tal manera: {{item.detalmanera}}
+                                  p Quiero: {{item.quiero}}
+                                  p Creador {{item.creadorTarjeta}}
+                                  p Prioridad {{item.prioridad}}
+                                  p Tamaño {{item.tamanio}}
+                            div(class="back")
+                              ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                li(sytle="list-style:none; margin: 1em; float: left;")
+                                  h2 Critérios de aceptación 
+                                  p {{item.criteriosAceptacion}}
+                                  p Dado: {{item.dado}}
+                                  p Cuando: {{item.cuando}}
+                                  p Entonces: {{item.entonces}}
+
+                    div(class="widget widget-table action-table" style="margin-top: 10px;")
+                      div(class="widget-header")
+                        i(class="icon-th-list")
+                        h3 Release Backlog
+                      div(class="widget-content" style="padding: 20px;")
+                        div(class="widget widget-table action-table" style="margin-top: 10px;" ng-repeat="item in releaseBacklog[0].sprints")
+                          div(class="widget-header")
+                            i(class="icon-th-list")
+                            h3 Sprint {{item.idSprint}} Tamaño: {{item.tamanioSprint}}
+                            if hayProductOwner
+                              button(type="button" class="btn btn-success" ng-click="checkSprint(item._id)" ng-if="!item.aprobado") Aprobar Sprint
+                          div(class="alert alert-success" role="alert" ng-if="item.aprobado") El Sprint fue aprobado
+                          div(class="alert alert-info" role="alert" ng-if="!item.aprobado") Sprint pendiente de validacion
+                          div(class="widget-content" style="padding: 20px;")
+                            div(class="flip-container" ntouchstart="this.classList.toggle('hover');" ng-repeat="backlog in item.backlog")
+                              if hayProductOwner
+                                div(ng-if="!item.aprobado")  
+                                  a(role="button" class="btn" ng-click="backlogAccepted('aceptada',backlog._id,item._id)")
+                                    i(class="btn-icon-only icon-ok-sign")
+                                  a(role="button" class="btn" ng-click="backlogRejected('rechazada',backlog,item._id)")
+                                    i(class="btn-icon-only icon-remove")
+                              input(role="button" class="btn btn-info" value="{{backlog.estadoAprobadaRechazada}}") 
+                              div(class="flipper")
+                                div(class="front")
+                                  ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                    li(sytle="list-style:none; margin: 1em; float: left;")
+                                      h2 {{backlog.narrativa}}
+                                      p Como: {{backlog.como}}
+                                      p De tal manera: {{backlog.detalmanera}}
+                                      p Quiero: {{backlog.quiero}}
+                                      p Creador {{backlog.creadorTarjeta}}
+                                      p Prioridad {{backlog.prioridad}}
+                                      p Tamaño {{backlog.tamanio}}
+                                div(class="back")
+                                  ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                    li(sytle="list-style:none; margin: 1em; float: left;")
+                                      h2 Critérios de aceptación 
+                                      p {{backlog.criteriosAceptacion}}
+                                      p Dado: {{backlog.dado}}
+                                      p Cuando: {{backlog.cuando}}
+                                      p Entonces: {{backlog.entonces}}
+                                  
+                    div(class="widget widget-table action-table" style="margin-top: 10px;")
+                      div(class="widget-header")
+                        i(class="icon-th-list")
+                        h3 Sprints 
+                      div(class="widget-content" style="padding: 20px;")
+                        div(class="form-group" ng-show="haySprint")
+                          form()
+                            label Tamaño
+                            input(type="text" placeholder="Tamaño" ng-model="datosSprint.tamanioSprint")
+                            label ID
+                            input(type="text" placeholder="ID" ng-model="datosSprint.idSprint")
+                            input(type="button" value="Crear Sprint" ng-click="crearSprint('#{idProy}')")
+                        h3 ID Sprint {{sprint.idSprint}}
+                        h3 Tamaño {{sprint.tamanioSprint}}
+                        button(type="button" class="btn btn-primary" ng-click="sprintToRelease()") Enviar al Release
+                        div(class="flip-container" ntouchstart="this.classList.toggle('hover');" ng-repeat="backlog in sprint.backlog" ng-if="!sprint.mandadaAlRelease")
+                          div(class="flipper")
+                            div(class="front")
+                              ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                li(sytle="list-style:none; margin: 1em; float: left;")
+                                  h2 {{backlog.narrativa}}
+                                  p Como: {{backlog.como}}
+                                  p De tal manera: {{backlog.detalmanera}}
+                                  p Quiero: {{backlog.quiero}}
+                                  p Creador {{backlog.creadorTarjeta}}
+                                  p Prioridad {{backlog.prioridad}}
+                                  p Tamaño {{backlog.tamanio}}
+                            div(class="back")
+                              ul(style="list-style:none; overflow: hidden; padding: 1em; margin: 1em; float: left;")
+                                li(sytle="list-style:none; margin: 1em; float: left;")
+                                  h2 Critérios de aceptación 
+                                  p {{backlog.criteriosAceptacion}}
+                                  p Dado: {{backlog.dado}}
+                                  p Cuando: {{backlog.cuando}}
+                                  p Entonces: {{backlog.entonces}}
+                          
+
+                              
+  div(id="editarHistoria" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true")
+    div(class="modal-header")
+      button(type="button" class="close" data-dismiss="modal" aria-hidden="true") ×
+      h3 Editar historia de usuario
+    div(class="modal-body")
+      form()
+        div(class="form-group")
+          label Narrativa:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.narrativa" name="narrativa" id="narrativa" placeholder="Narrativa")
+        div(class="form-group")
+          label Como:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.como" name="como" id="como" placeholder="Como")
+        div(class="form-group")
+          label De tal manera:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.detalmanera" name="detalmanera" id="detalmanera" placeholder="De tal manera")
+        div(class="form-group")
+          label Quiero:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.quiero" name="quiero" id="quiero" placeholder="Quiero")
+        div(class="form-group")
+          label Creador de tarjeta:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.creadorTarjeta" name="creador" id="creador" placeholder="Creador tarjeta")
+        div(class="form-group")
+          label Prioridad:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.prioridad" name="prioridad" id="prioridad" placeholder="Prioridad")
+        div(class="form-group")
+          label Tamaño:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.tamanio" name="tamanio" id="tamanio" placeholder="Tamaño")
+        div(class="form-group")
+          label Criterios de aceptacion:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.criteriosAceptacion" name="criteriosAceptacion" id="criteriosAceptacion" placeholder="Criterios de aceptacion")
+        div(class="form-group")
+          label Dado:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.dado" name="dado" id="dado" placeholder="Dado")
+        div(class="form-group")
+          label Cuando:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.cuando" name="cuando" id="cuando" placeholder="Cuando")
+        div(class="form-group")
+          label Entonces:
+          input(type="text" class="form-control span4" ng-model="historyToEdit.entonces" name="entonces" id="entonces" placeholder="Entonces")
+                                              
+        div(class="modal-footer")
+          button(class="btn" data-dismiss="modal" aria-hidden="true") Cerrar
+          button(class="btn btn-primary" ng-click="editbacklog()" data-dismiss="modal" aria-hidden="true") Guardar
+  br
+  script.
+    document.getElementById("newproject").style.visibility = "hidden";
+
+block footer
+block script

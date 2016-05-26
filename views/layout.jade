@@ -1,0 +1,172 @@
+doctype html
+html(ng-app="bybApp")
+head
+  // Bloque de meta's.
+  block meta
+  meta(charset="utf-8")
+  meta(http-equiv="X-UA-Compatible" content="IE=edge")
+  meta(name="viewport" content="width=device-width, initial-scale=1")
+  meta(name="apple-mobile-web-app-capable" content="yes")
+  base(href="/")
+
+  // Bloque de links.
+  block link
+  link(href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,600italic,400,600" rel="stylesheet")
+  link(href="http://netdna.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet")
+  link(href="/styles/template/bootstrap.min.css" rel="stylesheet")
+  link(href="/styles/template/bootstrap-responsive.min.css" rel="stylesheet")
+  link(href="/styles/datetimepicker/default.css" rel="stylesheet")
+  link(href="/styles/template/font-awesome.css" rel="stylesheet")
+  link(href="/styles/template/style.css" rel="stylesheet")
+  link(href="/styles/pages/dashboard.css" rel="stylesheet")
+  link(rel="stylesheet" type="text/css" href="/styles/style5.css")
+  link(href='http://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css')
+  link(href='/styles/rotate-card.css' rel='stylesheet' type='text/css')
+  
+  script(src="/js/template/jquery-1.7.2.min.js")
+  script(src="/js/utils.js")
+  script(src="/js/flip-card.js")
+  
+  // Bloque de título.
+  block title
+  title #{titulo} | B&B Projects
+
+body(ng-controller="backlogCtrl")
+  block navbar-header
+  div(class="navbar navbar-fixed-top")
+    div(class="navbar-inner")
+      div(class="container")
+        a(class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse")
+          span(class="icon-bar")
+            span(class="icon-bar")
+              span(class="icon-bar")
+        a(class="brand" href="/simple-cards") B&B Projects
+
+        div(class="nav-collapse")
+          ul(class="nav pull-right")
+            li(class="dropdown")
+              a(href="#" class="dropdown-toggle" data-toggle="dropdown")
+                i.icon-user
+                span(style="padding-left:5px;") usuario@mail.com
+                b(class="caret")
+              ul(class="dropdown-menu")
+                li
+                  a(href="/profile")
+                    |  Ver Perfil
+                li
+                  a(href="/")
+                    | Cerrar sesión
+
+          //form(class="navbar-search pull-right")
+          //  input(type="text" class="search-query" placeholder="Buscar proyecto")
+
+  block subnavbar-header
+  div(class="subnavbar")
+    div(class="subnavbar-inner")
+      div(class="container")
+        ul(class="mainnav")
+          li(class="active")
+            a(href="/simple-cards" id="dashboard")
+              i(class="icon-dashboard")
+              span Dashboard
+          li
+            a(href="#newProjectModal" data-toggle="modal" id="newproject")
+              i(class="icon-tasks")
+              span Crear proyecto
+          //li
+          //  a(href="#")
+          //    i(class="icon-facetime-video")
+          //    span App Tour
+          //li
+          //  a(href="#")
+          //    i(class="icon-bar-chart")
+          //    span Charts
+          //li
+          //  a(href="#")
+          //    i(class="icon-code")
+          //    span Shortcodes
+          //li(class="dropdown")
+          //  a(href="#" class="dropdown-toggle" data-toggle="dropdown")
+          //    i(class="icon-long-arrow-down")
+          //    span Drops
+          //    b(class="caret")
+          //  ul(class="dropdown-menu")
+          //    li
+          //      a(href="#") Icons
+          //    li
+          //      a(href="#") FAQ
+          //    li
+          //      a(href="#") Pricing Plans
+          //    li
+          //      a(href="#") Login
+          //    li
+          //      a(href="#") Signup
+          //    li
+          //      a(href="#") 404
+
+  block content
+    div(ng-controller="backlogCtrl")
+    
+      div(style="position: absolute; left:50%; top:50%; transform: translate(-50%, -50%); -webkit-transform: translate(-50%, -50%);")
+        div(class="button-wrapper")
+          a(href="#newProjectModal" data-toggle="modal" class="a-btn" style="text-decoration: none;")
+            span(class="a-btn-symbol") Z
+            span(class="a-btn-text") Sin proyectos
+            span(class="a-btn-slide-text") Crea tu primer proyecto
+            span(class="a-btn-slide-icon")
+
+  block footer
+  div(class="footer" style="position: fixed; bottom: 0; width: 100%;")
+    div(class="footer-inner")
+      div(class="container")
+        div(class="row")
+          div(class="span12" class="text-center") &copy; 2016
+            a(href="http://www.egrappler.com/" class="text-center")  B&B Projects
+
+  block newProjectModal
+  div(class="modal hide fade" tabindex="-1" role="dialog" id="newProjectModal" aria-labelledby="myModalLabel" aria-hidden="true")
+    div(class="modal-header")
+      button(type="button" class="close" data-dismiss="modal" aria-hidden="true") ×
+      h2 Crear nuevo proyecto
+    div(class="modal-body")
+      div(class="tab-content")
+        div(class="tab-pane active")
+          h3 Datos del Proyecto
+          form(class="form-horizontal" style="padding-top: 20px;" method='POST',action='dashboard')
+            fieldset
+              div(class="control-group")
+                label(class="control-label" for="nombreProyecto") Nombre del proyecto:
+                div(class="controls")
+                  input(type="text" class="span4" id="nombreProyecto" name="nombreProyecto")
+              div(class="control-group date"  id="fechaSolicitudCalendario")
+                label(class="control-label" for="fechaSolicitud") Fecha de solicitud:
+                div(class="controls")
+                  div(class="input-prepend input-append")
+                    input(class="span2" type="text" name="fechaSolicitud" id="fechaSol")
+                div(class="control-group date" id="fechaInicioCalendario")
+                label(class="control-label" for="fechaInicio") Fecha de inicio:
+                div(class="controls")
+                  div(class="input-prepend input-append")
+                    input(class="span2" id="fechaInicio" type="text" name="fechaArranque")
+              div(class="control-group")
+                label(class="control-label" for="Descripcion") Descripción:
+                div(class="controls")
+                  textarea(class="span4" rows="5" name="descripcion")
+
+              input(class="btn" data-dismiss="modal" aria-hidden="true" value="Cancelar")
+              a(href="/simple-cards")
+              input(class="btn btn-primary" type="submit" value="Crear Proyecto")
+  script.
+    $(document).ready(function() {
+      $('#fechaSol').Zebra_DatePicker();
+      $('#fechaInicio').Zebra_DatePicker();
+    });
+  
+  script(src="/js/template/excanvas.min.js")
+  script(src="/js/template/bootstrap.js")
+  script(src="/js/template/base.js")
+  //script(src="/js/datetimepicker/moments.js")
+  script(src="/js/datetimepicker/zebra_datepicker.js")
+  script(src="/socket.io/socket.io.js")
+  script(src="/js/angular/angular.min.js")
+  script(src="/js/bybProyect.js")

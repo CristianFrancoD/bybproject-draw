@@ -1,0 +1,60 @@
+doctype html
+html(lang="es")
+	head
+		meta(charset="utf-8")
+		meta(http-equiv="X-UA-Compatible" content="IE=edge")
+		meta(name="viewport" content="width=device-width, initial-scale=1")
+		meta(name="apple-mobile-web-app-capable" content="yes")
+
+		link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" type="text/css")
+    
+		link(rel="stylesheet" href="/styles/full.css")
+    
+		script(src="https://code.jquery.com/jquery-2.2.2.min.js" integrity="sha256-36cp2Co+/62rEAAYHLmRCPIych47CvdM+uTBJwSzWjI=" crossorigin="anonymous")
+		script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous")
+    
+		title B&B Projects
+		
+	body
+		div(class="modal fade" tabindex="-1" role="dialog" id="signUpModal")
+			div(class="modal-dialog modal-sm")
+				div(class="modal-content")
+					div(class="modal-header")
+						button(type="button" class="close" data-dismiss="modal" aria-label="Cerrar")
+							span(aria-hidden='true') &times;
+						h2(class="modal-title") SGPS 
+						h4(class="modal-title") Sistema para la Gestión de Proyectos de Software
+
+					div(class="modal-body")
+						form(action="/signup", method="POST")
+							h3 Registro de usuario
+					
+							div(class="form-group")
+								input(type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre(s)")
+
+							div(class="form-group")
+								input(type="text" class="form-control" name="apellidoP" id="primerApellido" placeholder="Primer apellido")
+
+							div(class="form-group")
+								input(type="text" class="form-control" name="apellidoM" id="segundoApellido" placeholder="Segundo apellido")
+
+							div(class="form-group")
+								input(type="email" class="form-control" name="email" id="email" placeholder="Correo electrónico")
+
+							div(class="form-group")
+								input(type="password" class="form-control" name="contra" id="contrasena" placeholder="Contraseña")
+							
+							div
+							input(type="submit" value="Aceptar" class="btn btn-info")
+
+	script.
+		$(window).load(function() {
+			$('#signUpModal').modal('show');
+		});
+	
+		$(document).ready(function() {
+
+			$('#signUpModal').on('hidden.bs.modal', function (e) {
+				window.location.href="/";
+			});
+		});

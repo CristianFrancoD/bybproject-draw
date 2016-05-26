@@ -1,0 +1,78 @@
+extends ./layout.jade
+
+
+block meta
+ 
+
+block link
+  link(rel="stylesheet",href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css")
+  
+  
+  
+  
+  
+  
+block title
+  title Profile
+  
+  
+
+block navbar-header
+ 
+
+block subnavbar-header
+                
+block content
+  div(class="container") 
+    div(class="row")
+      div(class="col-md-2") 
+        a(href="#" )
+          img(class="img-thumbnail" src="images/img-profile-missing.png" alt="Foto")
+        div(class="caption")
+          h3(class="text-center") #{user.nombreCompleto}
+          
+      div(class="col-md-10") 
+        div(class="panel panel-default")
+          div(class="panel-heading")
+            h2(class="panel-title") Informacion
+          div(class="panel-body")
+            p Nombre: #{user.nombreCompleto} 
+            p Email: #{user.email}
+            if user.fechaNacimiento
+              p Fecha de Nacimiento: #{user.fechaNacimiento}
+            else
+              p FechaNacimiento: Aun no ingresas este dato 
+            if user.curp
+              p CURP: #{user.curp}
+            else
+              p CURP: Aun no ingresas este dato
+            if user.rfc
+              p RFC: #{user.rfc}
+            else
+              p RFC: Aun no ingresas este dato
+            if user.domicilio
+              p Domicilio: #{user.domicilio}
+            else
+              p Domicilio: Aun no ingresas este dato
+            if user.habilidades.length > 0
+              p Habilidades:
+              each habilidad in user.habilidades  
+                ul
+                  li Habilidad: #{habilidad.habilidad} #{habilidad.grado} 
+            else
+              p Habilidades: No tienes registradas habilidades
+            a(href="/editProfile")
+              p
+                button(class="btn btn-primary") Editar Habilidades
+        div(class="thumbnail" style="text-align:center")
+            p Recuerda que puedas editar tu perfil, presionando el siguiente enlace
+              p
+                button(class="btn btn-default" type="submit" ng-click="showInfo==false") Editar Perfil
+        
+  script.
+    document.getElementById("newproject").style.visibility = "hidden";
+    
+  block footer
+  
+        
+block script
