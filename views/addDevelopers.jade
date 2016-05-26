@@ -22,12 +22,19 @@ block content
           thead
             tr
               th Nombre completo 
+              th Datos
               th Habilidades
               th(class="td-actions") Agregar
           each user in users
             tbody
               tr
                 td #{user.nombreCompleto}
+                td 
+                  select(style="width: 75px;")
+                    option RFC: #{user.rfc}
+                    option CURP: #{user.curp}
+                    option DOMICILIO: #{user.domicilio}
+                    option FECHA Na: #{user.fechaNacimiento} 
                 td
                   each habilidad in user.habilidades
                     span(class="label label-info") #{habilidad.habilidad} #{habilidad.grado}

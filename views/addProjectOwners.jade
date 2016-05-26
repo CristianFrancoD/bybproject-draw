@@ -20,14 +20,26 @@ block content
           thead
             tr
               th Nombre completo 
+              th Datos
+              th Habilidades
               th(class="td-actions") Agregar
           tbody
             each user in users
-              tr
-                td #{user.nombreCompleto} 
-                td(class="td-actions")
-                  form(action="/agregarPO/#{user._id}/#{idProy}", method="POST")
-                    input(type="submit" class="btn btn-primary" value="agregar" name="agregarDes")
+              tbody
+                tr
+                  td #{user.nombreCompleto}
+                  td 
+                    select(style="width: 75px;")
+                      option RFC: #{user.rfc}
+                      option CURP: #{user.curp}
+                      option DOMICILIO: #{user.domicilio}
+                      option FECHA Na: #{user.fechaNacimiento} 
+                  td
+                    each habilidad in user.habilidades
+                      span(class="label label-info") #{habilidad.habilidad} #{habilidad.grado}
+                  td(class="td-actions")
+                    form(action="/agregarPO/#{user._id}/#{idProy}", method="POST")
+                      input(type="submit" class="btn btn-primary" value="agregar" name="agregarDes")
   
   script.
     document.getElementById("newproject").style.visibility = "hidden";
